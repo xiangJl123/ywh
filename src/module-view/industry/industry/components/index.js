@@ -1,0 +1,1 @@
+export {default as EditIndustry} from './edit-industry'   // 编辑业委会

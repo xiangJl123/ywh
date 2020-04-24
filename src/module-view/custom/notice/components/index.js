@@ -1,0 +1,1 @@
+export {default as EditNotice} from './edit-notice'  
