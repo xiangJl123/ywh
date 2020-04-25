@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { routerOursMap } from './router-ours'
 
 Vue.use(Router)
 
@@ -117,52 +118,51 @@ export const constantRoutes = [
         meta: { title: '修改生成配置' }
       }
     ]
-  }
-  ,
-  {  
-    path: "/systemg",
-    redirect: "/system/administrator",
-    component: Layout,
-    // meta: {
-    //   title: "系统设置",
-    //   keepAlive: true,
-    //   icon: "setting",
-    //   permission: ["home"]
-    // },
-    children: [
-      {
-        path: "sadministrator",
-        // name: "administrator",
-        component: () => import("@/module-view/system/administrator/administrator"),
-        meta: { title: "管理员"}
-      },
-      // {
-      //   path: "/system/roles",
-      //   name: "roles",
-      //   component: () => import("@/module-view/system/roles/roles"),
-      //   meta: { title: "角色管理", keepAlive: false, permission: ["home"] }
-      // },
-      {
-        path: "smenu",
-        // name: "menu",
-        component: () => import("@/module-view/system/menu/menu.vue"),
-        meta: { title: "菜单管理"}
-      },
-      // {
-      //   path: "/system/option-record",
-      //   name: "option-record",
-      //   component: () => import("@/module-view/system/option-record/option-record"),
-      //   meta: { title: "操作日志", keepAlive: false, permission: ["home"] }
-      // },
-      // {
-      //   path: "/system/golbal",
-      //   name: "golbal",
-      //   component: () => import("@/module-view/system/golbal/golbal"),
-      //   meta: { title: "全局设置", keepAlive: false, permission: ["home"] }
-      // }
-    ]
-  }
-  
+  },
+  // {
+  //   path: '/systemg',
+  //   redirect: '/system/administrator',
+  //   component: Layout,
+  //   meta: {
+  //     title: '系统设置',
+  //     keepAlive: true,
+  //     icon: 'dashboard',
+  //     permission: ['home']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'sadministrator',
+  //       // name: "administrator",
+  //       component: () => import('@/module-view/system/administrator/administrator'),
+  //       meta: { title: '管理员' }
+  //     },
+  //     // {
+  //     //   path: "/system/roles",
+  //     //   name: "roles",
+  //     //   component: () => import("@/module-view/system/roles/roles"),
+  //     //   meta: { title: "角色管理", keepAlive: false, permission: ["home"] }
+  //     // },
+  //     {
+  //       path: 'smenu',
+  //       // name: "menu",
+  //       component: () => import('@/module-view/system/menu/menu.vue'),
+  //       meta: { title: '菜单管理' }
+  //     }
+  //     // {
+  //     //   path: "/system/option-record",
+  //     //   name: "option-record",
+  //     //   component: () => import("@/module-view/system/option-record/option-record"),
+  //     //   meta: { title: "操作日志", keepAlive: false, permission: ["home"] }
+  //     // },
+  //     // {
+  //     //   path: "/system/golbal",
+  //     //   name: "golbal",
+  //     //   component: () => import("@/module-view/system/golbal/golbal"),
+  //     //   meta: { title: "全局设置", keepAlive: false, permission: ["home"] }
+  //     // }
+  //   ]
+  // }
+  ...routerOursMap
 ]
 
 export default new Router({

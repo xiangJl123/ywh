@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal :title="title" v-model="openDialog" @ok="handleOk">
+    <a-modal v-model="openDialog" :title="title" @ok="handleOk">
       <template slot="footer">
         <a-button key="submit" type="primary" :loading="loading" @click="handleOk">
           保存
@@ -16,7 +16,7 @@
           :label-col="formItemLayout.labelCol"
           :wrapper-col="formItemLayout.wrapperCol"
         >
-          <a-input type="text" v-decorator="['name']" />
+          <a-input v-decorator="['name']" type="text" />
         </a-form-item>
         <a-form-item
           label="公告内容："
@@ -36,9 +36,10 @@
             placeholder="请发送对象"
             @change="handleObjectChange"
           >
-            <a-select-option v-for='(item, index) in objectList' 
-                             :value="item.id"
-                             :key=index
+            <a-select-option
+              v-for="(item, index) in objectList"
+              :key="index"
+              :value="item.id"
             >
               {{ item.name }}
             </a-select-option>
@@ -51,6 +52,7 @@
 <script>
 import JEditor from '@/components/jeecg/JEditor'
 export default {
+  components: { JEditor },
   props: {
     // 是否开启模态框
     open: {
@@ -58,30 +60,29 @@ export default {
       default: false
     }
   },
-  components: {JEditor},
   data() {
     const formItemLayout = {
       labelCol: { span: 5 },
       wrapperCol: { span: 8 }
-    };
+    }
     return {
       objectList: [],
       formItemLayout,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
-      title: "公告标题",
+      title: '公告标题',
       loading: false,
       form: this.$form.createForm(this)
-    };
+    }
   },
   computed: {
     // 是否开启模态框
     openDialog: {
       get() {
-        return this.open;
+        return this.open
       },
       set(val) {
-        this.handleCancel();
+        this.handleCancel()
       }
     }
   },
@@ -92,15 +93,15 @@ export default {
           // console.info('success');
           // this.cancel()
         }
-      });
-      this.$emit("on-ok");
+      })
+      this.$emit('on-ok')
     },
     handleCancel(e) {
-      this.$emit("on-cancel");
+      this.$emit('on-cancel')
     },
-    handleObjectChange(){
+    handleObjectChange() {
 
     }
   }
-};
+}
 </script>

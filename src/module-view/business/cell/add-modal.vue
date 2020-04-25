@@ -1,39 +1,39 @@
 <!--
- * @Descripttion: 
- * @version: 
+ * @Descripttion:
+ * @version:
  * @Author: hqp
  * @Date: 2020-04-07 21:17:33
  * @LastEditor: hpp
- * @LastEditTime: 2020-04-07 23:08:50
+ * @LastEditTime: 2020-04-25 21:40:21
  -->
 <template>
   <a-modal
+    v-model="visible"
     :title="title"
     centered
-    v-model="visible"
-    :destroyOnClose='true'
-    :maskClosable="false"
-    :okText="'添加'"
-    :cancelText="'返回'"
+    :destroy-on-close="true"
+    :mask-closable="false"
+    :ok-text="'添加'"
+    :cancel-text="'返回'"
     @ok="confirm"
     @cancel="cancel"
   >
-    <a-form-model :model="form" :rules="rules" ref="ruleForm" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-form-model-item prop='name' label="小区名称：">
+    <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form-model-item prop="name" label="小区名称：">
         <a-input v-model="form.name" />
       </a-form-model-item>
-      <a-form-model-item prop='num' label="总户数：">
+      <a-form-model-item prop="num" label="总户数：">
         <a-input v-model="form.num">
           <span slot="addonAfter">人</span>
         </a-input>
       </a-form-model-item>
-      <a-form-model-item prop='n' label="所属地区：">
+      <a-form-model-item prop="n" label="所属地区：">
         <a-input v-model="form.n" />
       </a-form-model-item>
-      <a-form-model-item prop='m' label="所属社区：">
+      <a-form-model-item prop="m" label="所属社区：">
         <a-input v-model="form.m" />
       </a-form-model-item>
-      <a-form-model-item prop='adress' label='详细地址：'>
+      <a-form-model-item prop="adress" label="详细地址：">
         <a-input v-model="form.adress" />
       </a-form-model-item>
     </a-form-model>
@@ -82,14 +82,14 @@ export default {
           { required: true, message: '请输入小区地址', trigger: 'blur' }
         ]
       }
-    };
+    }
   },
   computed: {
     visible: {
       set() {
         this.cancel()
       },
-      get(){
+      get() {
         return this.show
       }
     }
@@ -101,19 +101,19 @@ export default {
     confirm() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          console.log('submit!');
+          console.log('submit!')
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    cancel(){
+    cancel() {
       // this.visible = false
-      this.$emit("update:show", false)
+      this.$emit('update:show', false)
     }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>
