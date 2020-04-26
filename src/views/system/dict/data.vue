@@ -155,7 +155,8 @@
 </template>
 
 <script>
-import { listData, getData, delData, addData, updateData, exportData } from "@/api/system/dict/data";
+// import { listData, getData, delData, addData, updateData, exportData } from "@/api/system/dict/data";
+import { listData, getData, delData, addData, updateData, exportData } from "../../../api/module-view/system/dict.js";
 import { listType, getType } from "@/api/system/dict/type";
 
 export default {
@@ -210,7 +211,7 @@ export default {
   },
   created() {
     const dictId = this.$route.params && this.$route.params.dictId;
-    this.getType(dictId);
+    // this.getType(dictId);
     this.getTypeList();
     this.getDicts("sys_normal_disable").then(response => {
       this.statusOptions = response.data;

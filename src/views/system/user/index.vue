@@ -2,31 +2,9 @@
   <div class="app-container">
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :span="4" :xs="24">
-        <div class="head-container">
-          <el-input
-            v-model="deptName"
-            placeholder="请输入部门名称"
-            clearable
-            size="small"
-            prefix-icon="el-icon-search"
-            style="margin-bottom: 20px"
-          />
-        </div>
-        <div class="head-container">
-          <el-tree
-            :data="deptOptions"
-            :props="defaultProps"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            ref="tree"
-            default-expand-all
-            @node-click="handleNodeClick"
-          />
-        </div>
-      </el-col>
+     
       <!--用户数据-->
-      <el-col :span="20" :xs="24">
+      <el-col :span="24" :xs="24">
         <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
           <el-form-item label="用户名称" prop="userName">
             <el-input
@@ -38,9 +16,9 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="手机号码" prop="phonenumber">
+          <el-form-item label="手机号码" prop="phoneNumber">
             <el-input
-              v-model="queryParams.phonenumber"
+              v-model="queryParams.phoneNumber"
               placeholder="请输入手机号码"
               clearable
               size="small"
@@ -48,9 +26,9 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="状态" prop="status">
+          <el-form-item label="状态" prop="userStatus">
             <el-select
-              v-model="queryParams.status"
+              v-model="queryParams.userStatus"
               placeholder="用户状态"
               clearable
               size="small"
@@ -137,14 +115,13 @@
           <el-table-column label="用户编号" align="center" prop="userId" />
           <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" />
           <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" />
-          <el-table-column label="部门" align="center" prop="dept.deptName" :show-overflow-tooltip="true" />
-          <el-table-column label="手机号码" align="center" prop="phonenumber" width="120" />
+          <el-table-column label="手机号码" align="center" prop="phoneNumber" width="120" />
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
               <el-switch
-                v-model="scope.row.status"
-                active-value="0"
-                inactive-value="1"
+                v-model="scope.row.userStatus"
+                active-value="1"
+                inactive-value="0"
                 @change="handleStatusChange(scope.row)"
               ></el-switch>
             </template>
@@ -206,34 +183,34 @@
               <el-input v-model="form.nickName" placeholder="请输入用户昵称" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="归属部门" prop="deptId">
               <treeselect v-model="form.deptId" :options="deptOptions" placeholder="请选择归属部门" />
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="phonenumber">
-              <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+            <el-form-item label="手机号码" prop="phoneNumber">
+              <el-input v-model="form.phoneNumber" placeholder="请输入手机号码" maxlength="11" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="邮箱" prop="email">
               <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
             <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
               <el-input v-model="form.userName" placeholder="请输入用户名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
-              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" />
+            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="userPassword">
+              <el-input v-model="form.userPassword" placeholder="请输入用户密码" type="password" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="用户性别">
-              <el-select v-model="form.sex" placeholder="请选择">
+              <el-select v-model="form.userSex" placeholder="请选择">
                 <el-option
                   v-for="dict in sexOptions"
                   :key="dict.dictValue"
@@ -255,7 +232,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="岗位">
               <el-select v-model="form.postIds" multiple placeholder="请选择">
                 <el-option
@@ -267,16 +244,16 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
             <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择">
+              <el-select v-model="form.roleIdObjs" multiple placeholder="请选择">
                 <el-option
                   v-for="item in roleOptions"
                   :key="item.roleId"
                   :label="item.roleName"
                   :value="item.roleId"
-                  :disabled="item.status == 1"
+                  :disabled="item.userStatus == 1"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -328,15 +305,16 @@
 </template>
 
 <script>
-import { listUser, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "@/api/system/user";
+import { listUser, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "../../../api/module-view/system/user";
+import {RoleList } from "../../../api/module-view/system/role";
 import { getToken } from "@/utils/auth";
-import { treeselect } from "@/api/system/dept";
-import Treeselect from "@riophae/vue-treeselect";
+// import { treeselect } from "@/api/system/dept";
+// import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "User",
-  components: { Treeselect },
+  // components: { Treeselect },
   data() {
     return {
       // 遮罩层
@@ -360,15 +338,21 @@ export default {
       // 部门名称
       deptName: undefined,
       // 默认密码
-      initPassword: undefined,
+      initPassword: "123456",
       // 日期范围
       dateRange: [],
       // 状态数据字典
-      statusOptions: [],
+      statusOptions: [
+        {dictValue:0,dictLabel:"停用"},
+        {dictValue:1,dictLabel:"正常"}
+      ],
       // 性别状态字典
-      sexOptions: [],
+      sexOptions: [
+        {dictValue:0,dictLabel:"女"},
+        {dictValue:1,dictLabel:"男"},
+      ],
       // 岗位选项
-      postOptions: [],
+      // postOptions: [],
       // 角色选项
       roleOptions: [],
       // 表单参数
@@ -397,9 +381,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         userName: undefined,
-        phonenumber: undefined,
-        status: undefined,
-        deptId: undefined
+        phoneNumber: undefined,
+        userStatus: undefined,
+        // deptId: undefined
       },
       // 表单校验
       rules: {
@@ -409,21 +393,21 @@ export default {
         nickName: [
           { required: true, message: "用户昵称不能为空", trigger: "blur" }
         ],
-        deptId: [
-          { required: true, message: "归属部门不能为空", trigger: "blur" }
-        ],
-        password: [
+        // deptId: [
+        //   { required: true, message: "归属部门不能为空", trigger: "blur" }
+        // ],
+        userPassword: [
           { required: true, message: "用户密码不能为空", trigger: "blur" }
         ],
-        email: [
-          { required: true, message: "邮箱地址不能为空", trigger: "blur" },
-          {
-            type: "email",
-            message: "'请输入正确的邮箱地址",
-            trigger: ["blur", "change"]
-          }
-        ],
-        phonenumber: [
+        // email: [
+        //   { required: true, message: "邮箱地址不能为空", trigger: "blur" },
+        //   {
+        //     type: "email",
+        //     message: "'请输入正确的邮箱地址",
+        //     trigger: ["blur", "change"]
+        //   }
+        // ],
+        phoneNumber: [
           { required: true, message: "手机号码不能为空", trigger: "blur" },
           {
             pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
@@ -442,16 +426,16 @@ export default {
   },
   created() {
     this.getList();
-    this.getTreeselect();
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
-    });
-    this.getDicts("sys_user_sex").then(response => {
-      this.sexOptions = response.data;
-    });
-    this.getConfigKey("sys.user.initPassword").then(response => {
-      this.initPassword = response.msg;
-    });
+    // this.getTreeselect();
+    // this.getDicts("sys_normal_disable").then(response => {
+    //   this.statusOptions = response.data;
+    // });
+    // this.getDicts("sys_user_sex").then(response => {
+    //   this.sexOptions = response.data;
+    // });
+    // this.getConfigKey("sys.user.initPassword").then(response => {
+    //   this.initPassword = response.msg;
+    // });
   },
   methods: {
     /** 查询用户列表 */
@@ -482,17 +466,17 @@ export default {
     },
     // 用户状态修改
     handleStatusChange(row) {
-      let text = row.status === "0" ? "启用" : "停用";
+      let text = row.userStatus === "1" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.userName + '"用户吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return changeUserStatus(row.userId, row.status);
+          return changeUserStatus(row.userId, row.userStatus);
         }).then(() => {
           this.msgSuccess(text + "成功");
         }).catch(function() {
-          row.status = row.status === "0" ? "1" : "0";
+          row.userStatus = row.userStatus === "1" ? "0" : "1";
         });
     },
     // 取消按钮
@@ -504,17 +488,17 @@ export default {
     reset() {
       this.form = {
         userId: undefined,
-        deptId: undefined,
+        // deptId: undefined,
         userName: undefined,
         nickName: undefined,
-        password: undefined,
-        phonenumber: undefined,
-        email: undefined,
-        sex: undefined,
-        status: "0",
+        userPassword: undefined,
+        phoneNumber: undefined,
+        // email: undefined,
+        userSex: undefined,
+        userStatus: "1",
         remark: undefined,
-        postIds: [],
-        roleIds: []
+        // postIds: [],
+        roleIdObjs: []
       };
       this.resetForm("form");
     },
@@ -538,29 +522,41 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.getTreeselect();
-      getUser().then(response => {
-        this.postOptions = response.posts;
-        this.roleOptions = response.roles;
+      // this.getTreeselect();
+      RoleList().then(response => {
+        // this.postOptions = response.posts;
+        this.roleOptions = response.data;
         this.open = true;
         this.title = "添加用户";
-        this.form.password = this.initPassword;
+        this.form.roleIdObjs=[];
+        this.form.userPassword = this.initPassword;
       });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      this.getTreeselect();
+      // this.getTreeselect();
       const userId = row.userId || this.ids;
       getUser(userId).then(response => {
         this.form = response.data;
-        this.postOptions = response.posts;
+        // this.postOptions = response.posts;
         this.roleOptions = response.roles;
-        this.form.postIds = response.postIds;
-        this.form.roleIds = response.roleIds;
+        // this.form.postIds = response.postIds;
+        console.log(response.roleIds);
+        this.form.roleIdObjs=[];
+        // this.form.roleIdObjs=response.roleIds;
+        console.log(this.roleOptions);
+        debugger
+        response.roleIds.forEach(element => {
+           const obj=this.roleOptions.find(item=>{
+            return item.roleId==element.roleId
+          })
+          this.form.roleIdObjs.push(obj);
+        });
+         console.log(111);
+         console.log( this.form.roleIdObjs);
         this.open = true;
         this.title = "修改用户";
-        this.form.password = "";
       });
     },
     /** 重置密码按钮操作 */
@@ -582,7 +578,14 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.roleIds=this.form.roleIdObjs;
+          // this.form.roleIds=this.form.roleIdObjs.map(item=>{
+          //   return item.roleId
+          // })
+          // console.log(this.form);
+          // return
           if (this.form.userId != undefined) {
+            
             updateUser(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");

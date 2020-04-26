@@ -12,31 +12,31 @@ export function listMenu(query) {
 // 查询菜单详细
 export function getMenu(menuId) {
   return request({
-    url: '/ywhapi/app/menu/' + menuId,
+    url: '/app/menu/' + menuId,
     method: 'get'
   })
 }
 
 // 查询菜单下拉树结构
-// export function treeselect() {
-//   return request({
-//     url: '/system/menu/treeselect',
-//     method: 'get'
-//   })
-// }
+export function treeselect() {
+  return request({
+    url: '/app/menu/treeselect',
+    method: 'get'
+  })
+}
 
 // 根据角色ID查询菜单下拉树结构
-// export function roleMenuTreeselect(roleId) {
-//   return request({
-//     url: '/system/menu/roleMenuTreeselect/' + roleId,
-//     method: 'get'
-//   })
-// }
+export function roleMenuTreeselect(roleId) {
+  return request({
+    url: '/app/menu/roleMenuTreeselect/' + roleId,
+    method: 'get'
+  })
+}
 
 // 新增菜单
 export function addMenu(data) {
   return request({
-    url: '/ywhapi/app/menu',
+    url: 'app/menu',
     method: 'post',
     data: data
   })
@@ -45,7 +45,7 @@ export function addMenu(data) {
 // 修改菜单
 export function updateMenu(data) {
   return request({
-    url: '/system/add/menu',
+    url: '/app/menu',
     method: 'put',
     data: data
   })

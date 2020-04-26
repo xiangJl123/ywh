@@ -57,7 +57,7 @@ export const routerOursMap = [
         meta: { title: '角色管理', keepAlive: false, permission: ['home'] }
       },
       {
-        path: 'u-/menu',
+        path: 'u-menu',
         name: 'u-menu',
         component: () => import('@/module-view/system/menu/menu'),
         meta: { title: '菜单管理', keepAlive: false, permission: ['home'] }

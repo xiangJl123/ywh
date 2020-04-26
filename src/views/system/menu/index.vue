@@ -11,7 +11,7 @@
         />
       </el-form-item>
       <el-form-item label="状态">
-        <el-select v-model="queryParams.status" placeholder="菜单状态" clearable size="small">
+        <el-select v-model="queryParams.menuStatus" placeholder="菜单状态" clearable size="small">
           <el-option
             v-for="dict in statusOptions"
             :key="dict.dictValue"
@@ -33,15 +33,27 @@
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="160" />
-      <el-table-column prop="icon" label="图标" align="center" width="100">
+      <el-table-column prop="menuIcon" label="图标" align="center" width="100">
         <template slot-scope="scope">
-          <svg-icon :icon-class="scope.row.icon" />
+          <svg-icon :icon-class="'icon-'+scope.row.icon" />
+        </template>
+      </el-table-column>
+       <el-table-column prop="menuType" label="菜单类型" :formatter="statusFormat" width="80" >
+         <template slot-scope="scope">
+          <span v-if="scope.row.menuType=='M'">目录</span>
+          <span v-if="scope.row.menuType=='C'">菜单</span>
+          <span v-if="scope.row.menuType=='F'">按钮</span>
         </template>
       </el-table-column>
       <el-table-column prop="orderNum" label="排序" width="60" />
-      <el-table-column prop="perms" label="权限标识" :show-overflow-tooltip="true" />
-      <el-table-column prop="component" label="组件路径" :show-overflow-tooltip="true" />
-      <el-table-column prop="status" label="状态" :formatter="statusFormat" width="80" />
+      <el-table-column prop="menuPerms" label="权限标识" :show-overflow-tooltip="true" />
+      <el-table-column prop="menuComponent" label="组件路径" :show-overflow-tooltip="true" />
+      <el-table-column prop="menuStatus" label="状态" :formatter="statusFormat" width="80" >
+         <template slot-scope="scope">
+           <span v-if="scope.row.menuStatus==1">正常</span>
+           <span v-if="scope.row.menuStatus==0">停用</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -132,7 +144,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="是否外链">
-              <el-radio-group v-model="form.isFrame">
+              <el-radio-group v-model="form.flagFrame">
                 <el-radio label="0">是</el-radio>
                 <el-radio label="1">否</el-radio>
               </el-radio-group>
@@ -140,22 +152,22 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="路由地址" prop="path">
-              <el-input v-model="form.path" placeholder="请输入路由地址" />
+              <el-input v-model="form.menuPath" placeholder="请输入路由地址" />
             </el-form-item>
           </el-col>
           <el-col v-if="form.menuType == 'C'" :span="12">
-            <el-form-item label="组件路径" prop="component">
-              <el-input v-model="form.component" placeholder="请输入组件路径" />
+            <el-form-item label="组件路径" prop="menuComponent">
+              <el-input v-model="form.menuComponent" placeholder="请输入组件路径" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'M'" label="权限标识">
-              <el-input v-model="form.perms" placeholder="请权限标识" maxlength="50" />
+              <el-input v-model="form.menuPerms" placeholder="请权限标识" maxlength="50" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="显示状态">
-              <el-radio-group v-model="form.visible">
+              <el-radio-group v-model="form.menuVisible">
                 <el-radio
                   v-for="dict in visibleOptions"
                   :key="dict.dictValue"
@@ -166,7 +178,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="菜单状态">
-              <el-radio-group v-model="form.status">
+              <el-radio-group v-model="form.menuStatus">
                 <el-radio
                   v-for="dict in statusOptions"
                   :key="dict.dictValue"
@@ -208,9 +220,15 @@ export default {
       // 是否显示弹出层
       open: false,
       // 显示状态数据字典
-      visibleOptions: [],
+      visibleOptions: [
+        {dictValue:0,dictLabel:"隐藏"},
+        {dictValue:1,dictLabel:"显示"}
+      ],
       // 菜单状态数据字典
-      statusOptions: [],
+      statusOptions: [
+        {dictValue:0,dictLabel:"停用"},
+        {dictValue:1,dictLabel:"正常"}
+      ],
       // 查询参数
       queryParams: {
         menuName: undefined,
@@ -226,7 +244,7 @@ export default {
         orderNum: [
           { required: true, message: '菜单顺序不能为空', trigger: 'blur' }
         ],
-        path: [
+        menuPath: [
           { required: true, message: '路由地址不能为空', trigger: 'blur' }
         ]
       }
@@ -234,12 +252,12 @@ export default {
   },
   created() {
     this.getList()
-    this.getDicts('sys_show_hide').then(response => {
-      this.visibleOptions = response.data
-    })
-    this.getDicts('sys_normal_disable').then(response => {
-      this.statusOptions = response.data
-    })
+    // this.getDicts('sys_show_hide').then(response => {
+    //   this.visibleOptions = response.data
+    // })
+    // this.getDicts('sys_normal_disable').then(response => {
+    //   this.statusOptions = response.data
+    // })
   },
   methods: {
     // 选择图标
@@ -299,12 +317,12 @@ export default {
         menuId: undefined,
         parentId: 0,
         menuName: undefined,
-        icon: undefined,
+        menuIcon: undefined,
         menuType: 'M',
         orderNum: undefined,
-        isFrame: '1',
-        visible: '0',
-        status: '0'
+        flagFrame: '1',
+        menuVisible: '0',
+        menuStatus: '0'
       }
       this.resetForm('form')
     },

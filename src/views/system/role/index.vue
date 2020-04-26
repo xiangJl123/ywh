@@ -126,13 +126,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:role:edit']"
           >修改</el-button>
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-circle-check"
             @click="handleDataScope(scope.row)"
             v-hasPermi="['system:role:edit']"
-          >数据权限</el-button>
+          >数据权限</el-button> -->
           <el-button
             size="mini"
             type="text"
@@ -233,9 +233,9 @@
 </template>
 
 <script>
-import { listRole, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "@/api/system/role";
-import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
-import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
+
+import { listRole, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "../../../api/module-view/system/role";
+import { treeselect as menuTreeselect, roleMenuTreeselect } from '../../../api/module-view/system/menu'
 
 export default {
   name: "Role",
@@ -262,7 +262,10 @@ export default {
       // 日期范围
       dateRange: [],
       // 状态数据字典
-      statusOptions: [],
+      statusOptions: [
+         {dictValue:0,dictLabel:"停用"},
+        {dictValue:1,dictLabel:"正常"}
+      ],
       // 数据范围选项
       dataScopeOptions: [
         {
@@ -320,9 +323,9 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
-    });
+    // this.getDicts("sys_normal_disable").then(response => {
+    //   this.statusOptions = response.data;
+    // });
   },
   methods: {
     /** 查询角色列表 */
