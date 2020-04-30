@@ -222,7 +222,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
+              <el-radio-group v-model="form.userStatus">
                 <el-radio
                   v-for="dict in statusOptions"
                   :key="dict.dictValue"
@@ -247,7 +247,7 @@
           </el-col> -->
           <el-col :span="12">
             <el-form-item label="角色">
-              <el-select v-model="form.roleIdObjs" multiple placeholder="请选择">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择"  @change="changeRole">
                 <el-option
                   v-for="item in roleOptions"
                   :key="item.roleId"
@@ -438,6 +438,7 @@ export default {
     // });
   },
   methods: {
+    
     /** 查询用户列表 */
     getList() {
       this.loading = true;
@@ -495,10 +496,10 @@ export default {
         phoneNumber: undefined,
         // email: undefined,
         userSex: undefined,
-        userStatus: "1",
+        userStatus: 1,
         remark: undefined,
         // postIds: [],
-        roleIdObjs: []
+        roleIds: []
       };
       this.resetForm("form");
     },
@@ -522,42 +523,39 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      // this.getTreeselect();
       RoleList().then(response => {
         // this.postOptions = response.posts;
         this.roleOptions = response.data;
         this.open = true;
         this.title = "添加用户";
-        this.form.roleIdObjs=[];
+        this.form.roleIds=[];
         this.form.userPassword = this.initPassword;
       });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      // this.getTreeselect();
       const userId = row.userId || this.ids;
       getUser(userId).then(response => {
         this.form = response.data;
-        // this.postOptions = response.posts;
         this.roleOptions = response.roles;
-        // this.form.postIds = response.postIds;
-        console.log(response.roleIds);
-        this.form.roleIdObjs=[];
-        // this.form.roleIdObjs=response.roleIds;
-        console.log(this.roleOptions);
-        debugger
+        
+        this.form.roleIds=[];   // 选中的角色列表,里面只有角色字符串
+       
         response.roleIds.forEach(element => {
            const obj=this.roleOptions.find(item=>{
             return item.roleId==element.roleId
           })
-          this.form.roleIdObjs.push(obj);
+          this.form.roleIds.push(obj.roleId);
         });
-         console.log(111);
-         console.log( this.form.roleIdObjs);
+        
         this.open = true;
         this.title = "修改用户";
       });
+    },
+    // 选择角色
+    changeRole(){
+      console.log(this.form.roleIds);
     },
     /** 重置密码按钮操作 */
     handleResetPwd(row) {
@@ -578,12 +576,6 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.roleIds=this.form.roleIdObjs;
-          // this.form.roleIds=this.form.roleIdObjs.map(item=>{
-          //   return item.roleId
-          // })
-          // console.log(this.form);
-          // return
           if (this.form.userId != undefined) {
             
             updateUser(this.form).then(response => {

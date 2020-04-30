@@ -165,7 +165,7 @@
           <el-input-number v-model="form.roleSort" controls-position="right" :min="0" />
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
+          <el-radio-group v-model="form.roleStatus">
             <el-radio
               v-for="dict in statusOptions"
               :key="dict.dictValue"
@@ -193,42 +193,6 @@
       </div>
     </el-dialog>
 
-    <!-- 分配角色数据权限对话框 -->
-    <el-dialog :title="title" :visible.sync="openDataScope" width="500px" append-to-body>
-      <el-form :model="form" label-width="80px">
-        <el-form-item label="角色名称">
-          <el-input v-model="form.roleName" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="权限字符">
-          <el-input v-model="form.roleKey" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="权限范围">
-          <el-select v-model="form.dataScope">
-            <el-option
-              v-for="item in dataScopeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="数据权限" v-show="form.dataScope == 2">
-          <el-tree
-            :data="deptOptions"
-            show-checkbox
-            default-expand-all
-            ref="dept"
-            node-key="id"
-            empty-text="加载中，请稍后"
-            :props="defaultProps"
-          ></el-tree>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitDataScope">确 定</el-button>
-        <el-button @click="cancelDataScope">取 消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -299,7 +263,7 @@ export default {
         pageSize: 10,
         roleName: undefined,
         roleKey: undefined,
-        status: undefined
+        status: undefined,
       },
       // 表单参数
       form: {},
@@ -418,7 +382,7 @@ export default {
         roleName: undefined,
         roleKey: undefined,
         roleSort: 0,
-        status: "0",
+        roleStatus: 1,
         menuIds: [],
         deptIds: [],
         remark: undefined
@@ -458,6 +422,7 @@ export default {
       });
       getRole(roleId).then(response => {
         this.form = response.data;
+        console.log(response.data)
         this.open = true;
         this.title = "修改角色";
       });

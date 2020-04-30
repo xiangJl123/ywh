@@ -1,1 +1,1 @@
-export {default as EditBuild} from './edit-build'     // 编辑楼栋
+export {default as EditBuild} from './edit-build.vue'     // 编辑楼栋

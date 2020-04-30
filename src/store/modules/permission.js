@@ -20,6 +20,7 @@ const permission = {
         // 向后端请求路由数据
         getRouters().then(res => {
           const accessedRoutes = filterAsyncRouter(res.data)
+          console.log(accessedRoutes);
           accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
           commit('SET_ROUTES', accessedRoutes)
           resolve(accessedRoutes)
@@ -49,7 +50,8 @@ function filterAsyncRouter(asyncRouterMap) {
 
 export const loadView = (view) => { // 路由懒加载
   if(view.indexOf("module-view")> -1){
-    return (resolve) => require([`@${view}`], resolve)
+    // console.log(`@/${view}`);
+    return (resolve) => require([`@/${view}`], resolve)
   }else{
     return (resolve) => require([`@/views/${view}`], resolve)
   }
