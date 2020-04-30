@@ -94,7 +94,8 @@ const columns = [
         data,
         columns,
         showEdit: false,
-        selectedRowKeys: []
+        selectedRowKeys: [],
+        loading:false
       }
     },
     computed: {

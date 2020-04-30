@@ -14,7 +14,7 @@
           <div class="right">
             <a-input placeholder='请输入文件名称' />
            
-            <a-select :options="options" @change="onChange" placeholder="请选择资源分类" />
+            <a-select :options="options" @change="onChangeType" placeholder="请选择资源分类" />
             <a-button type="primary" icon="search"></a-button>
             <a-button type="link">
               重置
@@ -219,7 +219,7 @@ export default {
         console.log(key);
     },
     // change资源分类
-    onChange(){},
+    onChangeType(){},
     addFile(){},
     editFile(){},
     delFile(){},

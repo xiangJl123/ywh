@@ -44,7 +44,8 @@ import JEditor from '@/components/jeecg/JEditor'
     },
     data() {
       return {
-        value: ""
+        value: "",
+        loading:false
       };
     },
     methods: {
